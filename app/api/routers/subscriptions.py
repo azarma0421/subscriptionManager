@@ -8,6 +8,7 @@ from app.db.models.user import User
 subscriptionsRouter = APIRouter()
 
 
+# Endpoint to create a new subscription
 @subscriptionsRouter.post("/subscriptions", response_model=SubscriptionOut)
 def create_subscription(
     data: SubscriptionCreate,
@@ -17,9 +18,18 @@ def create_subscription(
     return svc.create_for_user(current_user, data)
 
 
+@subscriptionsRouter.post("/unsubscriptions", response_model=dict)
+def delete_subscription(
+    subscription_id: str,
+    current_user: User = Depends(get_current_user),
+    svc: SubscriptionService = Depends(get_subscription_service),
+):
+    return svc.delete_by_id(current_user.id, subscription_id)
+
+
 @subscriptionsRouter.get("/subscriptions", response_model=List[SubscriptionOut])
 def list_subscriptions(
     current_user: User = Depends(get_current_user),
     svc: SubscriptionService = Depends(get_subscription_service),
 ):
-    return svc.list_for_user(current_user)
+    return svc.list_by_user(current_user)
