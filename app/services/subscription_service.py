@@ -13,3 +13,6 @@ class SubscriptionService:
 
     def list_for_user(self, current_user: User) -> List[Subscription]:
         return self.subs.list_by_user_id(user_id=current_user.id)
+
+    def list_by_user_id(self, user_id: int) -> List[Subscription]:
+        return self.subs.list_by_user_id(user_id=user_id)
